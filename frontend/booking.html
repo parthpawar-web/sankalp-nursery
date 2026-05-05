@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Seedlings | Sankalp Hi-Tech Nursery</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    @media print {
+      body * { visibility: hidden !important; }
+      #booking-success, #booking-success * { visibility: visible !important; }
+      #booking-success { position: fixed !important; inset: 0 !important; background: #fff !important; display: flex !important; z-index: 99999 !important; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="neo-glass-bg">
+    <div class="neo-blob neo-blob-1"></div>
+    <div class="neo-blob neo-blob-2"></div>
+    <div class="neo-blob neo-blob-3"></div>
+  </div>
+
+  <div id="booking-success" style="display:none; position:fixed; inset:0; z-index:2147483647; background:rgba(13,43,26,0.95); justify-content:center; align-items:center">
+    <div style="position:relative; max-width:500px; width:92%; max-height:90vh; overflow-y:auto; border-radius:24px; background:#fff; box-shadow:0 25px 80px rgba(0,0,0,0.4)">
+      <div style="padding:2.5rem 2rem; text-align:center; background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:24px 24px 0 0">
+        <div style="width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#16a34a,#22c55e); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; box-shadow:0 8px 24px rgba(22,163,74,0.3)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" style="width:30px;height:30px"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style="font-family:var(--font-display); font-size:1.8rem; color:#1a4d2e; margin-bottom:0.3rem">Booking Confirmed!</h2>
+        <p style="color:#4ade80; font-size:0.9rem; font-weight:600">Your order has been placed successfully.</p>
+      </div>
+      <div style="padding:2rem">
+        <div style="background:#f9fafb; border-radius:16px; padding:1.5rem; border:1px solid #f1f5f9; margin-bottom:1.5rem">
+          <div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:#9ca3af; letter-spacing:0.05em; margin-bottom:1rem">Receipt Summary</div>
+          <div id="receipt-details" style="text-align:left; font-size:0.9rem; color:#4b5563; line-height:1.8"></div>
+          <div style="margin-top:1rem; border-top:1px dashed #e5e7eb; padding-top:0.8rem">
+            <div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:#9ca3af; letter-spacing:0.05em; margin-bottom:0.3rem">Booking ID</div>
+            <div id="booking-id-val" style="font-family:monospace; font-size:0.85rem; color:#374151; word-break:break-all"></div>
+          </div>
+        </div>
+        <p style="color:#6b7280; font-size:0.85rem; text-align:center; margin-bottom:1.5rem; line-height:1.6">Our team will call you within <strong>24 hours</strong> to confirm delivery details. Save this receipt for tracking.</p>
+        <div style="display:flex; gap:0.8rem">
+          <button onclick="window.print()" class="no-print" style="flex:1; padding:0.9rem; border:2px solid #1a4d2e; border-radius:14px; background:#fff; color:#1a4d2e; font-size:0.9rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.5rem">🖨️ Print Receipt</button>
+          <a href="/my-bookings.html" style="flex:1; display:flex; align-items:center; justify-content:center; gap:0.5rem; padding:0.9rem; border:none; border-radius:14px; background:linear-gradient(135deg,#1a4d2e,#2a5238); color:#fff; font-size:0.9rem; font-weight:700; cursor:pointer; text-decoration:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            View My Orders
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="bk-hero">
+    <div class="bk-breadcrumb">
+      <div class="bk-breadcrumb-inner">
+        <a href="/index.html">Home</a>
+        <span class="bk-breadcrumb-sep">›</span>
+        <a href="/varieties.html">Varieties</a>
+        <span class="bk-breadcrumb-sep">›</span>
+        <span class="bk-breadcrumb-current">Book Seedlings</span>
+      </div>
+    </div>
+    <div class="bk-hero-content">
+      <div class="bk-eyebrow"><span class="bk-eyebrow-dot"></span> Secure Order Placement</div>
+      <h1>Book Your<br /><em>Premium Seedlings</em></h1>
+      <p class="bk-hero-sub">Reserve your variety today — we'll prepare your order fresh from the polyhouse.</p>
+    </div>
+  </section>
+
+  <div class="bk-main">
+    <div class="bk-form-card">
+      <div class="bk-form-top-bar"></div>
+      <div class="bk-form-inner">
+        <div class="bk-form-title-row">
+          <div class="bk-form-eyebrow">🌱 Order Details</div>
+          <h2 class="bk-form-title">Complete Your <br />Booking Request</h2>
+          <p class="bk-form-subtitle">Fill in your delivery details below. Our team will confirm your order within 24 hours.</p>
+        </div>
+
+        <form id="booking-form">
+          <div class="bk-form-grid">
+            
+            <div class="bk-form-group full">
+              <label class="bk-field-label" for="variety">Select Variety</label>
+              <div class="bk-input-wrap">
+                <select id="variety" required style="width: 100%; padding: 1rem 1rem 1rem 3rem; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; font-family: inherit; font-size: 1rem; appearance: none; background: white">
+                  <option value="" disabled selected>Select a premium variety</option>
+                </select>
+                <span class="bk-input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="bk-form-group full">
+              <label class="bk-field-label" for="quantity">Quantity (Seedlings)</label>
+              <div class="bk-input-wrap">
+                <input type="number" id="quantity" min="500" step="100" placeholder="e.g. 1000" required />
+                <span class="bk-input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>
+                </span>
+              </div>
+              <div class="bk-qty-helper" id="qty-chips">
+                <span>Quick:</span>
+                <span class="bk-qty-chip" onclick="setQty(500)">500</span>
+                <span class="bk-qty-chip" onclick="setQty(1000)">1,000</span>
+                <span class="bk-qty-chip" onclick="setQty(2500)">2,500</span>
+                <span class="bk-qty-chip" onclick="setQty(5000)">5,000</span>
+              </div>
+            </div>
+
+            <div class="bk-form-group">
+              <label class="bk-field-label" for="mobile">Mobile Number</label>
+              <div class="bk-input-wrap">
+                <input type="tel" id="mobile" maxlength="10" placeholder="10-digit mobile number" required />
+                <span class="bk-input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="bk-form-group">
+              <label class="bk-field-label" for="village">Village / Delivery Address</label>
+              <div class="bk-input-wrap">
+                <input type="text" id="village" placeholder="Village name" required />
+                <span class="bk-input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="bk-form-group full">
+              <label class="bk-field-label" for="note">Additional Note <span class="opt" style="color: #9ca3af; font-weight: normal">(Optional)</span></label>
+              <div class="bk-input-wrap">
+                <textarea id="note" placeholder="Any special instructions for the nursery team?"></textarea>
+                <span class="bk-input-icon bk-textarea-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bk-divider"><span class="bk-divider-text">Payment Method</span></div>
+
+          <div class="bk-pay-methods">
+            <label id="pay-cash" class="bk-pay-card selected" onclick="setPayment('cash')">
+              <div class="bk-pay-info" style="display: flex; align-items: center; gap: 1rem; width: 100%">
+                <div class="bk-pay-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg></div>
+                <div class="bk-pay-details" style="flex: 1">
+                  <h4 style="color: var(--deep-green); margin: 0; font-size: 1.05rem">Pay at Nursery</h4>
+                  <p style="margin: 0.2rem 0 0 0; color: #6b7280; font-size: 0.85rem">Pay cash during delivery or pickup at nursery.</p>
+                </div>
+                <div class="bk-pay-radio"></div>
+              </div>
+            </label>
+
+            <label id="pay-online" class="bk-pay-card" onclick="setPayment('online')">
+              <div class="bk-pay-info" style="display: flex; align-items: center; gap: 1rem; width: 100%">
+                <div class="bk-pay-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg></div>
+                <div class="bk-pay-details" style="flex: 1">
+                  <h4 style="color: var(--deep-green); margin: 0; font-size: 1.05rem">Online (Razorpay)</h4>
+                  <p style="margin: 0.2rem 0 0 0; color: #6b7280; font-size: 0.85rem">Secure online payment with Card/UPI/Wallet.</p>
+                </div>
+                <div class="bk-pay-radio"></div>
+              </div>
+            </label>
+          </div>
+
+          <div id="error-msg" class="bk-error" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
+            <span id="error-text"></span>
+          </div>
+
+          <button type="submit" id="submit-btn" class="bk-submit-btn">
+            <span id="btn-spinner" class="bk-spinner" style="display: none;"></span>
+            <span id="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg></span>
+            <span id="btn-text">Confirm Booking Request</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="bk-summary">
+      <div class="bk-summary-header">
+        <div class="bk-summary-label">Order Summary</div>
+        <div id="summary-variety-name" class="bk-summary-variety">Select a variety</div>
+      </div>
+      <div class="bk-summary-body">
+        <div class="bk-info-row">
+          <div class="bk-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg></div>
+          <div style="flex: 1">
+            <div class="bk-info-lbl">Variety</div>
+            <div id="summary-variety" class="bk-info-val">—</div>
+          </div>
+        </div>
+        <div class="bk-info-row">
+          <div class="bk-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg></div>
+          <div style="flex: 1">
+            <div class="bk-info-lbl">Price Per Seedling</div>
+            <div id="summary-price" class="bk-info-val">₹0.00</div>
+          </div>
+        </div>
+        <div class="bk-info-row">
+          <div class="bk-info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></svg></div>
+          <div style="flex: 1">
+            <div class="bk-info-lbl">Quantity</div>
+            <div id="summary-qty" class="bk-info-val">Enter quantity</div>
+          </div>
+        </div>
+        <div class="bk-estimate-box">
+          <div class="bk-estimate-label">Estimated Total</div>
+          <div id="summary-total" class="bk-estimate-amount">₹0</div>
+          <div id="summary-total-sub" class="bk-estimate-sub">Enter quantity to calculate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/navbar.js"></script>
+  <script>
+    renderNavbar();
+    renderFooter();
+
+    let varieties = [];
+    let selectedVariety = null;
+    let paymentMethod = 'cash';
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+    }
+
+    async function init() {
+      try {
+        const res = await fetch('/api/varieties');
+        const data = await res.json();
+        if (data.success) {
+          varieties = data.data;
+          const select = document.getElementById('variety');
+          varieties.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v._id;
+            opt.textContent = `${v.varietyName} - ₹${v.price}/seedling`;
+            select.appendChild(opt);
+          });
+
+          const urlParams = new URLSearchParams(window.location.search);
+          const varietyFromQuery = urlParams.get('variety');
+          if (varietyFromQuery) {
+            const found = varieties.find(v => v.varietyName.toLowerCase() === varietyFromQuery.toLowerCase());
+            if (found) {
+              select.value = found._id;
+              selectVariety(found);
+            }
+          } else if (varieties.length > 0) {
+            select.value = varieties[0]._id;
+            selectVariety(varieties[0]);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function selectVariety(v) {
+      selectedVariety = v;
+      document.getElementById('summary-variety-name').textContent = v.varietyName;
+      document.getElementById('summary-variety').textContent = v.varietyName;
+      document.getElementById('summary-price').textContent = `₹${v.price.toFixed(2)}`;
+      updateTotal();
+    }
+
+    document.getElementById('variety').addEventListener('change', (e) => {
+      const v = varieties.find(v => v._id === e.target.value);
+      selectVariety(v);
+    });
+
+    document.getElementById('quantity').addEventListener('input', updateTotal);
+
+    function setQty(q) {
+      document.getElementById('quantity').value = q;
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const qty = document.getElementById('quantity').value;
+      const totalEl = document.getElementById('summary-total');
+      const subEl = document.getElementById('summary-total-sub');
+      const qtyEl = document.getElementById('summary-qty');
+
+      if (qty && selectedVariety) {
+        const total = (qty * selectedVariety.price).toFixed(2);
+        totalEl.textContent = `₹${total}`;
+        subEl.textContent = `For ${Number(qty).toLocaleString()} seedlings`;
+        qtyEl.textContent = Number(qty).toLocaleString();
+      } else {
+        totalEl.textContent = '₹0';
+        subEl.textContent = 'Enter quantity to calculate';
+        qtyEl.textContent = 'Enter quantity';
+      }
+    }
+
+    function setPayment(method) {
+      paymentMethod = method;
+      document.getElementById('pay-cash').classList.toggle('selected', method === 'cash');
+      document.getElementById('pay-online').classList.toggle('selected', method === 'online');
+    }
+
+    document.getElementById('booking-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorEl = document.getElementById('error-msg');
+      const errorText = document.getElementById('error-text');
+      const submitBtn = document.getElementById('submit-btn');
+      const spinner = document.getElementById('btn-spinner');
+      const icon = document.getElementById('btn-icon');
+      const btnText = document.getElementById('btn-text');
+
+      errorEl.style.display = 'none';
+
+      const mobile = document.getElementById('mobile').value;
+      if (mobile.length !== 10) {
+        errorText.textContent = 'Please enter a valid 10-digit mobile number.';
+        errorEl.style.display = 'flex';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      spinner.style.display = 'block';
+      icon.style.display = 'none';
+      btnText.textContent = 'Processing...';
+
+      try {
+        if (paymentMethod === 'online') {
+          // Razorpay flow
+          const orderResponse = await fetch(window.location.origin + '/api/bookings/razorpay-order', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              varietyId: selectedVariety._id,
+              quantity: Number(document.getElementById('quantity').value)
+            })
+          });
+
+          const orderData = await orderResponse.json();
+          if (!orderResponse.ok || !orderData.success) {
+            throw new Error(orderData.message || 'Payment initiation failed.');
+          }
+
+          const configRes = await fetch(window.location.origin + '/api/bookings/config/razorpay', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const configData = await configRes.json();
+
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          const options = {
+            key: configData.key,
+            amount: orderData.order.amount,
+            currency: 'INR',
+            name: 'Sankalp Hi-Tech Nursery',
+            description: `Booking for ${selectedVariety.varietyName}`,
+            image: 'https://cdn-icons-png.flaticon.com/512/628/628283.png', // Stable icon to avoid local CORS issues
+            order_id: orderData.order.id,
+            handler: async function (response) {
+              try {
+                const verifyRes = await fetch(window.location.origin + '/api/bookings/verify-payment', {
+                  method: 'POST',
+                  headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  },
+                  body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature
+                  })
+                });
+
+                const verifyData = await verifyRes.json();
+                if (verifyData.success) {
+                  // CRITICAL: Must await this so the handler doesn't finish early
+                  await submitFinalBooking({
+                    paymentStatus: 'Paid',
+                    razorpayOrderId: response.razorpay_order_id,
+                    razorpayPaymentId: response.razorpay_payment_id
+                  });
+                } else {
+                  throw new Error('Payment verification failed.');
+                }
+              } catch (err) {
+                console.error('VERIFICATION ERROR:', err);
+                errorText.textContent = err.message;
+                errorEl.style.display = 'flex';
+                resetBtn();
+              }
+            },
+            prefill: { 
+              name: user.name || '',
+              email: user.email || '',
+              contact: mobile 
+            },
+            theme: { color: '#1a4d2e' },
+            modal: { ondismiss: () => resetBtn() }
+          };
+
+          const rzp = new window.Razorpay(options);
+          rzp.open();
+        } else {
+          submitFinalBooking({ paymentStatus: 'Pending' });
+        }
+      } catch (err) {
+        errorText.textContent = err.message;
+        errorEl.style.display = 'flex';
+        resetBtn();
+      }
+    });
+
+    async function submitFinalBooking(additionalData = {}) {
+      try {
+        console.log('--- SUBMITTING FINAL BOOKING (v2.2) ---', additionalData);
+        const response = await fetch(window.location.origin + '/api/bookings', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ 
+            variety: selectedVariety._id,
+            quantity: Number(document.getElementById('quantity').value), 
+            mobile: document.getElementById('mobile').value, 
+            village: document.getElementById('village').value, 
+            note: document.getElementById('note').value, 
+            paymentMethod,
+            ...additionalData
+          })
+        });
+
+        const result = await response.json();
+        console.log('--- SERVER RESPONSE RECEIVED ---', result);
+
+        if (response.ok && result.success) {
+          console.log('--- TRIGGERING SUCCESS OVERLAY ---');
+          showSuccess(result.data);
+        } else {
+          throw new Error(result.message || 'Booking failed.');
+        }
+      } catch (err) {
+        console.error('--- BOOKING ERROR ---', err);
+        const errorEl = document.getElementById('error-msg');
+        const errorText = document.getElementById('error-text');
+        errorText.textContent = err.message;
+        errorEl.style.display = 'flex';
+        resetBtn();
+      }
+    }
+
+    function showSuccess(data) {
+      console.log('--- EXECUTING showSuccess() ---');
+      const overlay = document.getElementById('booking-success');
+      overlay.style.setProperty('display', 'flex', 'important');
+      overlay.style.setProperty('z-index', '2147483647', 'important');
+      
+      // Ensure the processing button is reset behind the scenes
+      resetBtn();
+      
+      document.getElementById('booking-id-val').textContent = data._id;
+      document.getElementById('receipt-details').innerHTML = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem"><span>Variety:</span> <strong style="color: #111827">${selectedVariety.varietyName}</strong></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem"><span>Quantity:</span> <strong style="color: #111827">${data.quantity.toLocaleString()} Seedlings</strong></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 1px dashed #eef1ef"><span>Total Amount:</span> <strong style="color: #1a4d2e; font-size: 1.1rem">₹${data.totalAmount.toLocaleString()}</strong></div>
+        <div style="display: flex; justify-content: space-between; align-items: center"><span>Payment Status:</span> <strong style="padding: 0.2rem 0.8rem; border-radius: 99px; background: #f0fdf4; color: #16a34a; font-size: 0.75rem; text-transform: uppercase">${data.paymentStatus || 'PAID'}</strong></div>
+      `;
+    }
+
+    function resetBtn() {
+      const submitBtn = document.getElementById('submit-btn');
+      const spinner = document.getElementById('btn-spinner');
+      const icon = document.getElementById('btn-icon');
+      const btnText = document.getElementById('btn-text');
+      submitBtn.disabled = false;
+      spinner.style.display = 'none';
+      icon.style.display = 'inline-block';
+      btnText.textContent = 'Confirm Booking Request';
+    }
+
+    init();
+  </script>
+</body>
+</html>

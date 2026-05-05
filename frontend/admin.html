@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Sankalp Hi-Tech Nursery</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="masterpiece-dashboard">
+  
+  <div class="neo-glass-bg">
+    <div class="neo-blob neo-blob-1"></div>
+    <div class="neo-blob neo-blob-2"></div>
+    <div class="neo-blob neo-blob-3"></div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; padding:2rem 5%; align-items:center; position:relative; z-index:100">
+    <a href="/index.html" style="text-decoration:none; display:flex; align-items:center; gap:1.2rem">
+      <img src="/images/logo.png" alt="Sankalp Logo" style="height:55px" />
+      <div>
+        <div style="font-family:var(--font-display); font-size:1.6rem; color:var(--text-main); font-weight:700; line-height:1">Admin Hub</div>
+        <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.12em; margin-top:4px">Sankalp Hi-Tech Nursery</div>
+      </div>
+    </a>
+    <div style="display:flex; gap:1.5rem; align-items:center">
+      <a href="/index.html" style="text-decoration:none; color:var(--text-muted); font-weight:700; font-size:0.9rem">Back Home</a>
+      <button onclick="localStorage.clear(); window.location.href='/login.html'" style="background:#ef4444; color:white; border:none; padding:0.6rem 1.2rem; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.85rem">Sign Out</button>
+    </div>
+  </div>
+
+  <main style="padding: 0 5% 10rem; max-width: 1440px; margin: 0 auto">
+    <!-- Stats Grid -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1.5rem; margin-bottom:3.5rem">
+      <div style="background:#fff; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.04)">
+        <div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:#9ca3af; letter-spacing:0.1em; margin-bottom:0.8rem">Total Orders</div>
+        <div id="stat-total" style="font-family:var(--font-display); font-size:2.8rem; font-weight:700; color:#1a4d2e; line-height:1">0</div>
+        <div style="font-size:0.8rem; color:#059669; font-weight:700; margin-top:0.8rem">● All Time</div>
+      </div>
+      <div style="background:#fff; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.04)">
+        <div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:#9ca3af; letter-spacing:0.1em; margin-bottom:0.8rem">Revenue Received</div>
+        <div id="stat-revenue" style="font-family:var(--font-display); font-size:2.8rem; font-weight:700; color:#1a4d2e; line-height:1">₹0</div>
+        <div style="font-size:0.8rem; color:#6b7280; font-weight:600; margin-top:0.8rem">From paid orders</div>
+      </div>
+      <div style="background:#fff; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.04)">
+        <div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:#9ca3af; letter-spacing:0.1em; margin-bottom:0.8rem">Paid Count</div>
+        <div id="stat-paid" style="font-family:var(--font-display); font-size:2.8rem; font-weight:700; color:#1a4d2e; line-height:1">0</div>
+        <div style="font-size:0.8rem; color:#059669; font-weight:700; margin-top:0.8rem">● Cleared</div>
+      </div>
+      <div style="background:#fff; border-radius:20px; padding:2rem; box-shadow:0 4px 20px rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.04)">
+        <div style="font-size:0.7rem; text-transform:uppercase; font-weight:700; color:#9ca3af; letter-spacing:0.1em; margin-bottom:0.8rem">Pending Deliveries</div>
+        <div id="stat-pending" style="font-family:var(--font-display); font-size:2.8rem; font-weight:700; color:#ef4444; line-height:1">0</div>
+        <div style="font-size:0.8rem; color:#ef4444; font-weight:700; margin-top:0.8rem">● Needs Action</div>
+      </div>
+    </div>
+
+    <!-- Order Management -->
+    <div class="masterpiece-table-wrap">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem">
+        <div>
+          <h2 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; color: var(--accent)">Order Management</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem">Detailed view of all nursery reservations</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center">
+          <input type="text" id="order-search" style="padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; width: 220px" placeholder="Search orders..." />
+          <select id="status-filter" style="padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; background: white">
+            <option value="all">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Dispatched">Dispatched</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto">
+        <table class="masterpiece-table" style="width: 100%; border-collapse: collapse">
+          <thead>
+            <tr>
+              <th style="text-align: left; width: 100px">ID</th>
+              <th style="text-align: left">Customer</th>
+              <th style="text-align: left">Variety & Qty</th>
+              <th style="text-align: left; width: 150px">Total Cost</th>
+              <th style="text-align: left">Payment</th>
+              <th style="text-align: right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr><td colspan="6" style="text-align: center; padding: 4rem">Loading orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Variety Inventory -->
+    <div class="masterpiece-table-wrap" style="margin-top: 3rem">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem">
+        <div>
+          <h2 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; color: var(--accent)">Variety Inventory</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.2rem">Manage your nursery catalog</p>
+        </div>
+        <button onclick="toggleAddVariety()" style="background: #1a4d2e; color: white; border: none; padding: 1rem 2.22rem; border-radius: 14px; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer">+ Add New Variety</button>
+      </div>
+
+      <div id="add-variety-form" style="display: none; margin-bottom: 3rem; padding: 2.5rem; background: #f8fafc; border-radius: 1.5rem; border: 1px solid var(--glass-border)">
+        <form id="v-form">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem">
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #4b5563">Variety Name</label>
+              <input type="text" id="v-name" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1" required />
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #4b5563">Price (₹)</label>
+              <input type="number" step="0.01" id="v-price" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1" required />
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #4b5563">Initial Stock</label>
+              <input type="number" id="v-stock" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1" required />
+            </div>
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #4b5563">Description</label>
+              <textarea id="v-desc" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1; min-height: 100px" required></textarea>
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem; padding: 1.5rem; background: white; border-radius: 12px; border: 1px solid #e2e8f0">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; font-size: 0.95rem; color: #1a4d2e">🖼️ Variety Image Path</label>
+            <input type="text" id="v-img" placeholder="/images/variety-name.jpg" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem" value="/images/logo.png" />
+          </div>
+          <button type="submit" style="margin-top: 2rem; width: 100%; background: #1a4d2e; color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer">Publish Variety</button>
+        </form>
+      </div>
+
+      <div style="overflow-x: auto">
+        <table class="masterpiece-table" style="width: 100%; border-collapse: collapse">
+          <thead>
+            <tr>
+              <th style="text-align: left">Variety</th>
+              <th style="text-align: left; width: 150px">Base Price</th>
+              <th style="text-align: left; width: 150px">Stock Available</th>
+              <th style="text-align: left; width: 200px">Booked/Reserved</th>
+              <th style="text-align: right; width: 100px">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="varieties-tbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Regional Seedling Distribution Map -->
+    <div style="background:#fff; border-radius:20px; padding:2.5rem; box-shadow:0 4px 20px rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.04); margin-top:3rem">
+      <div style="margin-bottom:2rem">
+        <h2 style="font-family:var(--font-display); font-size:2.2rem; font-weight:700; color:#1a4d2e">Regional Coverage</h2>
+        <p style="color:#6b7280; font-size:0.9rem; margin-top:0.3rem">Seedling distribution across customer villages</p>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start" id="regional-section">
+        <div id="region-map" style="background:#f8faf9; border-radius:16px; padding:1.5rem; min-height:350px; position:relative; overflow:hidden">
+          <div style="text-align:center; color:#9ca3af; padding:3rem">Loading map data...</div>
+        </div>
+        <div id="region-list" style="max-height:400px; overflow-y:auto">
+          <div style="text-align:center; color:#9ca3af; padding:3rem">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/navbar.js"></script>
+  <script>
+    let bookings = [];
+    let varieties = [];
+    const token = localStorage.getItem('token');
+
+    async function init() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || user.role !== 'admin') {
+        window.location.href = '/login.html';
+        return;
+      }
+      await fetchData();
+    }
+
+    async function fetchData() {
+      try {
+        const [bookRes, varRes] = await Promise.all([
+          fetch('/api/bookings', { headers: { 'Authorization': `Bearer ${token}` } }),
+          fetch('/api/varieties')
+        ]);
+        const bookData = await bookRes.json();
+        const varData = await varRes.json();
+
+        if (bookData.success) {
+          bookings = bookData.data;
+          renderBookings();
+          calculateStats();
+        }
+        if (varData.success) {
+          varieties = varData.data;
+          renderVarieties();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function calculateStats() {
+      const revenue = bookings
+        .filter(b => b.paymentStatus?.toLowerCase() === 'paid' && b.status?.toLowerCase() !== 'cancelled')
+        .reduce((acc, b) => acc + (b.totalAmount || 0), 0);
+      
+      const paidCount = bookings.filter(b => b.paymentStatus?.toLowerCase() === 'paid').length;
+      const pendingCount = bookings.filter(b => {
+        const s = b.status?.toLowerCase();
+        return s === 'pending' || s === 'confirmed' || s === 'dispatched';
+      }).length;
+
+      document.getElementById('stat-total').textContent = bookings.length;
+      document.getElementById('stat-revenue').textContent = '₹' + revenue.toLocaleString();
+      document.getElementById('stat-paid').textContent = paidCount;
+      document.getElementById('stat-pending').textContent = pendingCount;
+    }
+
+    function renderBookings() {
+      const tbody = document.getElementById('orders-tbody');
+      const search = document.getElementById('order-search').value.toLowerCase();
+      const filter = document.getElementById('status-filter').value;
+
+      const filtered = bookings.filter(b => {
+        const name = (b.user?.name || '').toLowerCase();
+        const phone = (b.mobile || '').toLowerCase();
+        const id = b._id.toLowerCase();
+        const matchSearch = name.includes(search) || phone.includes(search) || id.includes(search);
+        const matchStatus = filter === 'all' || b.status === filter;
+        return matchSearch && matchStatus;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 4rem; color: var(--text-muted)">No orders found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(order => {
+        const isPaid = order.paymentStatus === 'Paid';
+        return `
+          <tr>
+            <td style="font-weight: 700; color: var(--text-muted)">#${order._id.slice(-6).toUpperCase()}</td>
+            <td>
+              <div style="font-weight: 800; color: #000; font-size: 1.05rem">${order.user?.name || 'Unknown'}</div>
+              <div style="font-size: 0.75rem; font-weight: 600; color: #444; margin-top: 2px">${order.mobile}</div>
+            </td>
+            <td>
+              <div style="font-weight: 800; font-family: var(--font-display); font-size: 1.3rem; color: #000">${order.variety?.varietyName || order.varietyName || 'Unknown'}</div>
+              <div style="font-weight: 600; color: var(--text-main); font-size: 0.85rem">${order.quantity.toLocaleString()} Seedlings</div>
+            </td>
+            <td><div style="font-weight: 800; color: var(--accent-light)">₹${order.totalAmount.toLocaleString()}</div></td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="status-pill ${isPaid ? 'status-completed' : 'status-pending'}">${isPaid ? '✅' : '⏳'} ${order.paymentStatus}</span>
+                ${!isPaid ? `<button onclick="markPaid('${order._id}')" style="background: #fef3c7; color: #b45309; border: none; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer">Mark Paid</button>` : ''}
+              </div>
+            </td>
+            <td style="text-align: right">
+              <select onchange="updateStatus('${order._id}', this.value)" style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; background: white; font-weight: 600; color: #334155">
+                <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                <option value="Dispatched" ${order.status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
+                <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
+                <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+              </select>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderVarieties() {
+      const tbody = document.getElementById('varieties-tbody');
+      tbody.innerHTML = varieties.map(v => {
+        // Calculate booked seeds for this variety
+        const booked = bookings
+          .filter(b => (b.variety?._id === v._id) || (b.variety === v._id) || (b.variety?.varietyName === v.varietyName))
+          .reduce((acc, b) => acc + (b.quantity || 0), 0);
+          
+        const total = v.stock + booked; // Total originally available (approx)
+        const percent = total > 0 ? Math.min(100, Math.round((booked / total) * 100)) : 0;
+        
+        return `
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 1rem">
+              <img src="${fixImageUrl(v.image)}" alt="${v.varietyName}" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1)" onerror="this.src='/images/logo.png'">
+              <span style="font-weight: 800; font-family: var(--font-display); font-size: 1.3rem; color: #000">${v.varietyName}</span>
+            </div>
+          </td>
+          <td style="font-weight: 800; color: #1a4d2e; font-size: 1.1rem">₹${v.price}</td>
+          <td>
+            <div style="font-weight: 700; color: #475569">${v.stock.toLocaleString()}</div>
+          </td>
+          <td>
+            <div style="margin-bottom:0.3rem; display:flex; justify-content:space-between; font-size:0.8rem">
+              <span style="font-weight:800; color:#1a4d2e">${booked.toLocaleString()}</span>
+              <span style="font-weight:600; color:#6b7280">${percent}%</span>
+            </div>
+            <div style="width:100%; height:6px; background:#f1f5f9; border-radius:3px; overflow:hidden">
+              <div style="height:100%; width:${percent}%; background:linear-gradient(90deg, #22c55e, #16a34a); border-radius:3px"></div>
+            </div>
+          </td>
+          <td style="text-align:right">
+            <button onclick="deleteVariety('${v._id}')" style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border: none; cursor: pointer; font-weight: 700; padding:0.4rem 0.8rem; border-radius:8px; transition:all 0.2s" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">Remove</button>
+          </td>
+        </tr>
+      `}).join('');
+    }
+
+    async function updateStatus(id, status) {
+      try {
+        const res = await fetch(`/api/bookings/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ status })
+        });
+        if (res.ok) {
+          bookings = bookings.map(b => b._id === id ? { ...b, status } : b);
+          calculateStats();
+          renderBookings();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    async function markPaid(id) {
+      if (!confirm('Mark as paid?')) return;
+      try {
+        const res = await fetch(`/api/bookings/${id}/pay`, {
+          method: 'PATCH',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          bookings = bookings.map(b => b._id === id ? { ...b, paymentStatus: 'Paid' } : b);
+          calculateStats();
+          renderBookings();
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function toggleAddVariety() {
+      const el = document.getElementById('add-variety-form');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    document.getElementById('v-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const body = {
+        varietyName: document.getElementById('v-name').value,
+        price: Number(document.getElementById('v-price').value),
+        stock: Number(document.getElementById('v-stock').value),
+        description: document.getElementById('v-desc').value,
+        image: document.getElementById('v-img').value
+      };
+      try {
+        const res = await fetch('/api/varieties', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          alert('Variety added!');
+          fetchData();
+          toggleAddVariety();
+          document.getElementById('v-form').reset();
+        }
+      } catch (err) { console.error(err); }
+    });
+
+    async function deleteVariety(id) {
+      if (!confirm('Are you sure?')) return;
+      try {
+        const res = await fetch(`/api/varieties/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) fetchData();
+      } catch (err) { console.error(err); }
+    }
+
+    document.getElementById('order-search').addEventListener('input', renderBookings);
+    document.getElementById('status-filter').addEventListener('change', renderBookings);
+
+    function renderRegionalMap() {
+      const regionMap = {};
+      bookings.forEach(order => {
+        const village = (order.village || 'Unknown').trim();
+        if (!regionMap[village]) regionMap[village] = { seeds: 0, orders: 0, revenue: 0 };
+        regionMap[village].seeds += order.quantity || 0;
+        regionMap[village].orders += 1;
+        regionMap[village].revenue += order.totalAmount || 0;
+      });
+
+      const sorted = Object.entries(regionMap).sort((a, b) => b[1].seeds - a[1].seeds);
+      const maxSeeds = sorted.length > 0 ? sorted[0][1].seeds : 1;
+      
+      const mapEl = document.getElementById('region-map');
+      let svgNodes = '';
+      
+      // We will place nodes inside the 'Maharashtra' abstract bounds
+      // Bounds approx: X: 80 to 480, Y: 100 to 280
+      sorted.forEach((entry, i) => {
+        const [name, data] = entry;
+        const radius = Math.max(12, (data.seeds / maxSeeds) * 35);
+        
+        // Deterministic pseudo-random placement based on name length/chars
+        const seed1 = name.charCodeAt(0) || 50;
+        const seed2 = name.length * 10;
+        const cx = 100 + ((seed1 * seed2 * (i + 1)) % 380);
+        const cy = 100 + ((seed1 + seed2 * (i + 1)) % 180);
+        
+        svgNodes += `
+          <g style="cursor:pointer; transition:all 0.3s" class="map-node">
+            <!-- Pulse Effect -->
+            <circle cx="${cx}" cy="${cy}" r="${radius}" fill="#16a34a" opacity="0.3">
+              <animate attributeName="r" values="${radius};${radius + 15};${radius}" dur="2.5s" repeatCount="indefinite" begin="${i * 0.2}s"/>
+              <animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite" begin="${i * 0.2}s"/>
+            </circle>
+            <!-- Core Node -->
+            <circle cx="${cx}" cy="${cy}" r="${radius}" fill="url(#nodeGrad)" stroke="#fff" stroke-width="2" filter="drop-shadow(0 4px 6px rgba(22,163,74,0.3))"/>
+            <text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#fff" font-size="10" font-weight="800" font-family="var(--font-main)">${(data.seeds / 1000).toFixed(1)}k</text>
+            <!-- Label -->
+            <rect x="${cx - 40}" y="${cy + radius + 8}" width="80" height="22" rx="11" fill="#fff" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"/>
+            <text x="${cx}" y="${cy + radius + 22}" text-anchor="middle" fill="#1f2937" font-size="9" font-weight="700" font-family="var(--font-main)">${name.length > 10 ? name.slice(0, 10) + '..' : name}</text>
+          </g>`;
+      });
+
+      mapEl.innerHTML = `
+        <div style="position:absolute; top:1.5rem; left:1.5rem; z-index:10">
+          <div style="font-size:0.7rem; text-transform:uppercase; font-weight:800; color:#1a4d2e; letter-spacing:0.1em; background:#f0fdf4; padding:0.4rem 1rem; border-radius:99px; border:1px solid #bbf7d0; display:inline-block">📍 Maharashtra Region</div>
+        </div>
+        <svg viewBox="0 0 600 400" style="width:100%; height:100%; display:block; background:radial-gradient(circle at center, #f8fafc, #f1f5f9)">
+          <defs>
+            <linearGradient id="mapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#e2e8f0" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#cbd5e1" stop-opacity="0.2"/>
+            </linearGradient>
+            <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#22c55e"/>
+              <stop offset="100%" stop-color="#15803d"/>
+            </linearGradient>
+          </defs>
+          
+          <!-- Abstract State Outline -->
+          <path d="M 80 160 C 140 70 280 50 380 90 C 480 130 580 180 520 280 C 460 380 320 360 220 380 C 120 400 20 250 80 160 Z" fill="url(#mapGrad)" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="8 4"/>
+          
+          <!-- Decorative Grid/Connections -->
+          <path d="M 80 160 L 220 380 M 380 90 L 520 280 M 280 50 L 320 360" stroke="#fff" stroke-width="1" opacity="0.5"/>
+          
+          ${svgNodes}
+        </svg>
+      `;
+
+      // Ranked List
+      const listEl = document.getElementById('region-list');
+      if (sorted.length === 0) {
+        listEl.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:3rem">No village data yet</div>';
+        return;
+      }
+
+      listEl.innerHTML = `
+        <div style="font-size:0.65rem; text-transform:uppercase; font-weight:700; color:#9ca3af; letter-spacing:0.08em; margin-bottom:1rem">Top Ranked Villages</div>
+        ${sorted.map(([name, data], i) => `
+          <div style="display:flex; align-items:center; gap:1rem; padding:1rem; border-radius:16px; margin-bottom:0.8rem; background:${i === 0 ? 'linear-gradient(135deg, #f0fdf4, #dcfce7)' : '#fff'}; border:1px solid ${i === 0 ? '#86efac' : '#f1f5f9'}; box-shadow:0 2px 10px rgba(0,0,0,0.02)">
+            <div style="width:32px; height:32px; border-radius:50%; background:${i === 0 ? '#16a34a' : i < 3 ? '#22c55e' : '#f1f5f9'}; color:${i < 3 ? '#fff' : '#64748b'}; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; flex-shrink:0; box-shadow:${i < 3 ? '0 4px 10px rgba(22,163,74,0.3)' : 'none'}">${i + 1}</div>
+            <div style="flex:1; min-width:0">
+              <div style="font-weight:800; color:#111827; font-size:1.05rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${name}</div>
+              <div style="font-size:0.8rem; color:#6b7280; font-weight:600; margin-top:2px">${data.orders} confirmed orders</div>
+            </div>
+            <div style="text-align:right; flex-shrink:0">
+              <div style="font-weight:800; color:#1a4d2e; font-size:1.1rem">${data.seeds.toLocaleString()}</div>
+              <div style="font-size:0.75rem; color:#16a34a; font-weight:700">🌱 Seedlings</div>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    async function fetchDataAndRender() {
+      await fetchData();
+      renderRegionalMap();
+    }
+
+    init = async function() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || user.role !== 'admin') {
+        window.location.href = '/login.html';
+        return;
+      }
+      await fetchDataAndRender();
+    };
+
+    init();
+  </script>
+</body>
+</html>
